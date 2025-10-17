@@ -22,7 +22,7 @@ repos:
       packages:
         - micro
         - starship
-        - @cosmic-desktop-environment
+        - cosmic-desktop-environment
   - type: default-flatpaks  # Optional: Remove or customize for minimalism
     notify: true
     system:
