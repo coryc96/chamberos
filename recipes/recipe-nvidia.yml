@@ -12,7 +12,7 @@ modules:
     files:
       - usr: /usr  # Includes uBlue's standard tweaks (e.g., ujust for config)
 
- type: dnf
+  - type: dnf
 repos:
   copr:
     enable:
