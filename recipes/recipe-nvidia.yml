@@ -1,13 +1,13 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 # image will be published to ghcr.io/<user>/<name>
-name: chamberos
+name: chamberos-nvidia
 # description will be included in the image's metadata
 description: This is my personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 42 # latest is also supported if you want new updates ASAP
+image-version: latest # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -16,22 +16,61 @@ modules:
     files:
       - source: system
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
-
+  # This is the most important module for your hardware.
+  - type: nvidia
+    # This installs the akmod-nvidia packages from RPM Fusion.
+    # Bluebuild handles enabling the RPM Fusion repos automatically.
+    drivers:
+      - akmod-nvidia
+      # Install CUDA and the Xorg driver for full support
+      - xorg-x11-drv-nvidia-cuda
+    # These kernel arguments are essential for the NVIDIA driver to load correctly.
+    # They disable the open-source 'nouveau' driver so the NVIDIA driver can take over.
+    rpm-ostree:
+      kargs:
+        - rd.driver.blacklist=nouveau
+        - modprobe.blacklist=nouveau
+        - nvidia-drm.modeset=1
+       
   - type: dnf
     repos:
+  
       copr:
         - atim/starship
+        - rmutti/kernel-xanmod
+        - solarliner/system76-scheduler
     install:
       packages:
         - micro
         - starship
+        - kernel-xanmod-edge
+        - system76-scheduler
+        - gamescope
+        - vkbasalt
+        - distrobox
     remove:
       packages:
         # example: removing firefox (in favor of the flatpak)
         # "firefox" is the main package, "firefox-langpacks" is a dependency
         - firefox
         - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-
+  - type: dnf
+    repos:
+      # Add the COPR repository for the COSMIC desktop packages.
+      - copr: ryanabx/cosmic-epoch
+    install:
+      # The core packages needed to run the COSMIC session.
+      - cosmic-session
+      - cosmic-settings-daemon
+      - cosmic-background
+      - cosmic-applets
+      - cosmic-osd
+      - cosmic-notifications
+      - cosmic-workspaces-applet
+      - cosmic-applications-applet
+      - cosmic-launcher-applet
+      - cosmic-panel
+      - cosmic-screenshot
   - type: default-flatpaks
     configurations:
       - notify: true # Send notification after install/uninstall is finished (true/false)
@@ -41,5 +80,9 @@ modules:
           - org.mozilla.firefox
           - org.gnome.Loupe
       - scope: user # Also add Flathub user repo, but no user packages
-
+  - type: systemd
+    enable:
+      # This ensures the System76 scheduler runs on boot.
+      - system76-scheduler.service
+      
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
