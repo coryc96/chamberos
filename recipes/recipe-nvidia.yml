@@ -8,19 +8,17 @@ base-image: ghcr.io/ublue-os/base-main
 image-version: latest  # Or specify a Fedora version like 41 or 42
 
 modules:
-  - type: files
-    files:
-      - usr: /usr  # Includes uBlue's standard tweaks (e.g., ujust for config)
 
   - type: dnf
-repos:
-  copr:
-    enable:
-      - ryanabx/cosmic-epoch
-      - atim/starship
+    repos:
+      copr:
+        enable:
+          - atim/starship
     install:
       packages:
-        - micro
         - starship
+    group-install:
+      with-optional: true
+      packages:
         - cosmic-desktop-environment
   - type: signing  # Optional: For signed images
