@@ -1,0 +1,13 @@
+name: chamberos 
+description: A custom image based on Universal Blue main with the COSMIC desktop.
+base-image: ghcr.io/ublue-os/base-main
+base-tag: latest
+
+image-tags:
+  - cosmic
+
+modules:
+  - type: dnf
+    install:
+      - "@cosmic-desktop-environment"
+      - vim
