@@ -18,6 +18,7 @@ modules:
       copr:
         enable:
           - atim/starship
+          - lizardbyte/stable
     install:
       packages:
         - starship
