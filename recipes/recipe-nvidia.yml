@@ -10,9 +10,7 @@ image-version: latest  # Or specify a Fedora version like 41 or 42
 modules:
 
   - type: akmods
-    install:
-      - kmod-nvidia
-      - akmod-nvidia
+    base: bazzite
     nvidia-driver: nvidia
     
   - type: dnf
