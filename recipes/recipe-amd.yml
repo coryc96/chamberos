@@ -22,7 +22,7 @@ modules:
     install:
       packages:
         - starship
-        - sunshine
+        - Sunshine
         - neovim
     group-install:
       with-optional: true
