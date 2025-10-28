@@ -10,7 +10,7 @@ image-version: latest  # Or specify a Fedora version like 41 or 42
 modules:
 
   - type: akmods
-    base: bazzite
+    base: main
     nvidia-driver: nvidia
     install:
       - framework-laptop
@@ -22,8 +22,15 @@ modules:
     install:
       packages:
         - starship
+        - sunshine
+        - neovim
     group-install:
       with-optional: true
       packages:
         - cosmic-desktop-environment
+
+  - type: fonts
+    fonts:
+      nerd-fonts:
+        - FiraCode
   - type: signing  # Optional: For signed images
