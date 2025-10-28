@@ -12,7 +12,8 @@ modules:
   - type: akmods
     base: bazzite
     nvidia-driver: nvidia
-    
+    install:
+      - framework-laptop
   - type: dnf
     repos:
       copr:
